@@ -1,10 +1,13 @@
 # 80. Implementation Roadmap
 
-## Phase 0 — 기준선
+## Phase 0 — 기준선과 구성 원칙
 
 - Native Codex 기준 작업 10개 기록
 - T00~T12 Fixture 확정
 - 현재 하드웨어·네트워크·스토리지 진단
+- `docs/43-local-llm-stack-composition.md` 확인
+- `docs/44-model-sequencing-and-cost-governance.md` 확인
+- 새 Foundation Model 학습이 아니라 기존 Open-weight Model과 Runtime을 조합하는 프로젝트임을 확인
 
 ## Phase 1 — Windows Core
 
@@ -75,6 +78,19 @@ OpenKnowledge Pilot 승인 후에만 수행한다.
 - GitHub Auto Sync는 별도 승인
 - 회사 CONFIDENTIAL 자료는 로컬 정책 검증 전 반입 금지
 
+## Phase 2D — 기존 Git 문서 Bootstrap
+
+세부 절차는 `docs/83-openknowledge-bootstrap-plan.md`를 따른다.
+
+- `LLM-Private` Source Commit 고정
+- 승인된 문서만 선별 이관
+- Source Path·Commit·Data Class Metadata 추가
+- `LLM-Private → AI-Knowledge` 단방향 수동 이관
+- Sonnet이 분류·구조를 검토
+- Local Executor가 Frontmatter·링크·경로를 검사
+- 자동 Commit·Push 금지
+- 원본 `LLM-Private` 문서 변경 금지
+
 ## Phase 3 — 벤치마크 자동화와 승인 상태
 
 - Run 로그
@@ -82,15 +98,26 @@ OpenKnowledge Pilot 승인 후에만 수행한다.
 - Stack 승인 상태
 - 회귀 세트
 - OpenKnowledge MCP 활성·비활성 비교
+- Sonnet Planner와 Local Executor의 종단 작업 비교
 
-## Phase 4 — Open WebUI RAG
+## Phase 4 — 명시적 모델 Sequencing
+
+- 기본 Planner·Vision·Reviewer: Claude Sonnet 4.6
+- PRIVATE·CONFIDENTIAL Executor: Windows Local Fast
+- PUBLIC Budget Cloud Executor 후보 Benchmark
+- Opus 4.8은 사용자 승인 기반 예외 승격
+- `config/orchestration-policy.example.yml` 적용
+- 자동 Sonnet→Opus, Local→Cloud 전환 금지
+- 완료 작업당 비용 기록
+
+## Phase 5 — Open WebUI RAG
 
 - 일반 채팅
 - PDF·Office 등 혼합 자료 RAG
 - 출처 표시
 - OpenKnowledge와 역할 분리
 
-## Phase 5 — 로컬 Embedding과 Semantic Search
+## Phase 6 — 로컬 Embedding과 Semantic Search
 
 - Windows OpenAI-compatible Embedding Endpoint
 - Embedding 모델 승인
@@ -98,26 +125,29 @@ OpenKnowledge Pilot 승인 후에만 수행한다.
 - 외부 Content Egress 0 검증
 - Lexical 대비 품질 비교
 
-## Phase 6 — ComfyUI
+## Phase 7 — ComfyUI
 
 - LLM 언로드
 - 이미지 생성·인페인팅·업스케일
 - VRAM 반환 검증
 
-## Phase 7 — Medium / Deep Experimental
+## Phase 8 — Medium / Deep Experimental
 
 - Fast 실패 과제만 Medium으로 확장
 - Deep는 Experimental 유지
 - 20B 이상은 별도 승인
+- Prompt·RAG·Tool 개선으로 해결되지 않는 반복 실패에만 LoRA 검토
 
-## Phase 8 — Cloud PAYG
+## Phase 9 — Cloud PAYG
 
 - 월 10달러 하드 캡
 - 자동 충전 Off
 - 자동 Fallback Off
-- PUBLIC 작업부터 검증
+- Sonnet 기본 Planner
+- Budget Cloud는 PUBLIC 작업부터 검증
+- Opus는 예외 승인
 
-## Phase 9 — 외부 Skill 선택 도입
+## Phase 10 — 외부 Skill 선택 도입
 
 - Superpowers Project-level 시험
 - UI/UX Pro Max 디자인 저장소 전용 시험
