@@ -1,0 +1,174 @@
+schema_version: '1.0'
+policy_document: docs/93-skill-evaluation-policy.md
+
+skills:
+  - id: superpowers
+    display_name: Superpowers
+    official_repository: https://github.com/obra/superpowers
+    status: candidate-review
+    priority: 1
+    intended_scope: project
+    install_phase: after-core-phase-1
+    capabilities:
+      - brainstorming
+      - writing-plans
+      - git-worktrees
+      - test-driven-development
+      - systematic-debugging
+      - verification
+    conflicts_with:
+      - ecc
+      - everything-claude-code
+      - gstack-full-workflow
+    security:
+      skillsllm_status: passed
+      scan_date: '2026-06-22'
+      manual_review_required: true
+      telemetry_review_required: true
+    pin:
+      release_or_commit: null
+      sha256: null
+    auto_update: false
+    auto_install: false
+
+  - id: ui-ux-pro-max
+    display_name: UI UX Pro Max
+    official_repository: https://github.com/nextlevelbuilder/ui-ux-pro-max-skill
+    status: candidate-review
+    priority: 2
+    intended_scope: design-project-only
+    install_phase: after-infrastructure-build
+    capabilities:
+      - ui-review
+      - design-system
+      - accessibility
+      - frontend-design-guidance
+    security:
+      skillsllm_status: passed
+      scan_date: '2026-04-15'
+      manual_review_required: true
+      path_smoke_test_required: true
+    pin:
+      release_or_commit: null
+      sha256: null
+    auto_update: false
+    auto_install: false
+
+  - id: headroom
+    display_name: Headroom
+    official_repository: https://github.com/chopratejas/headroom
+    status: deferred
+    priority: 3
+    intended_scope: experimental
+    install_phase: phase-3-or-later
+    capabilities:
+      - context-compression
+      - tool-output-compression
+      - rag-chunk-compression
+    restrictions:
+      - disabled-during-benchmark
+      - raw-logs-required
+    security:
+      skillsllm_status: passed-with-low-warning
+      scan_date: '2026-06-22'
+      manual_review_required: true
+    pin:
+      release_or_commit: null
+      sha256: null
+    auto_update: false
+    auto_install: false
+
+  - id: gstack
+    display_name: gstack
+    official_repository: https://github.com/garrytan/gstack
+    status: deferred
+    priority: 4
+    intended_scope: browser-qa-only
+    install_phase: on-demand
+    capabilities:
+      - browser-qa
+      - screenshot
+      - console-network-inspection
+      - release-documentation
+    conflicts_with:
+      - superpowers
+      - ecc
+    restrictions:
+      - no-cookie-import-without-approval
+      - no-full-workflow-install-before-audit
+    security:
+      skillsllm_status: passed-with-medium-warnings
+      scan_date: '2026-06-22'
+      manual_review_required: true
+    pin:
+      release_or_commit: null
+      sha256: null
+    auto_update: false
+    auto_install: false
+
+  - id: claude-mem
+    display_name: Claude-Mem
+    official_repository: https://github.com/thedotmack/claude-mem
+    status: deferred
+    priority: 5
+    intended_scope: none
+    install_phase: privacy-review-required
+    capabilities:
+      - persistent-memory
+      - session-history-search
+    restrictions:
+      - no-confidential-data
+      - no-install-before-privacy-review
+      - prefer-markdown-project-memory
+    security:
+      skillsllm_status: passed-with-low-warnings
+      scan_date: '2026-04-15'
+      manual_review_required: true
+      data-flow-review_required: true
+    auto_update: false
+    auto_install: false
+
+  - id: ecc
+    display_name: ECC
+    official_repository: https://github.com/affaan-m/ECC
+    status: deferred
+    priority: 6
+    intended_scope: none
+    install_phase: overlap-review-required
+    capabilities:
+      - agent-workflows
+      - memory
+      - security-rules
+      - research-workflow
+    conflicts_with:
+      - superpowers
+      - gstack-full-workflow
+      - current-claude-md
+    security:
+      skillsllm_status: passed-with-medium-warning
+      scan_date: '2026-05-19'
+      manual_review_required: true
+    auto_update: false
+    auto_install: false
+
+  - id: cursor-talk-to-figma-mcp
+    display_name: TalkToFigma MCP
+    official_repository: https://github.com/grab/cursor-talk-to-figma-mcp
+    status: blocked
+    priority: 99
+    intended_scope: none
+    install_phase: blocked-until-remediated
+    capabilities:
+      - figma-read
+      - figma-write
+    blocked_reasons:
+      - high-severity-mcp-sdk-warning
+      - windows-file-read-warning
+      - unsafe-remote-install-pattern
+      - network-binding-review-required
+    security:
+      skillsllm_status: warning
+      scan_date: '2026-06-22'
+      manual_review_required: true
+    auto_update: false
+    auto_install: false
