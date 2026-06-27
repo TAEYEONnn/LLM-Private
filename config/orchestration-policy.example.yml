@@ -1,0 +1,110 @@
+schema_version: '1.0'
+policy_document: docs/44-model-sequencing-and-cost-governance.md
+
+profiles:
+  frontier-plan:
+    provider: anthropic
+    model: claude-sonnet-4-6
+    role: planner
+    effort: medium
+    allowed_data_classes:
+      - PUBLIC
+      - PRIVATE_WITH_APPROVAL
+    automatic_fallback: false
+    monthly_budget_usd: 10
+    task_budget_usd: 0.50
+
+  frontier-vision:
+    provider: anthropic
+    model: claude-sonnet-4-6
+    role: vision-planner
+    effort: medium
+    allowed_data_classes:
+      - PUBLIC
+      - PRIVATE_WITH_APPROVAL
+    automatic_fallback: false
+    task_budget_usd: 0.50
+
+  local-private-execute:
+    provider: windows-local
+    model_alias: coding-local-fast-primary
+    role: executor
+    context_length: 8192
+    thinking: false
+    allowed_data_classes:
+      - PUBLIC
+      - PRIVATE
+      - CONFIDENTIAL
+    automatic_fallback: false
+    task_budget_usd: 0
+
+  budget-cloud-execute:
+    provider: cloud-payg
+    model: null
+    role: executor
+    status: candidate
+    allowed_data_classes:
+      - PUBLIC
+    automatic_fallback: false
+    task_budget_usd: 1.00
+    benchmark_required: true
+
+  frontier-final-review:
+    provider: anthropic
+    model: claude-sonnet-4-6
+    role: reviewer
+    effort: medium
+    allowed_data_classes:
+      - PUBLIC
+      - PRIVATE_WITH_APPROVAL
+    automatic_fallback: false
+    task_budget_usd: 0.25
+
+  opus-escalation:
+    provider: anthropic
+    model: claude-opus-4-8
+    role: exceptional-planner-reviewer
+    effort: medium
+    allowed_data_classes:
+      - PUBLIC
+      - PRIVATE_WITH_APPROVAL
+    automatic_fallback: false
+    user_approval_required: true
+    task_budget_usd: null
+
+routing:
+  automatic_routing: false
+  automatic_paid_fallback: false
+  automatic_sonnet_to_opus: false
+  automatic_local_to_cloud: false
+  planner_default: frontier-plan
+  private_executor_default: local-private-execute
+  confidential_executor_default: local-private-execute
+  max_planner_retries_before_escalation_review: 2
+
+execution_contract:
+  required_fields:
+    - task_id
+    - data_class
+    - goal
+    - constraints
+    - target_files
+    - implementation_steps
+    - acceptance_tests
+    - prohibited_actions
+    - planner_model
+    - executor_profile
+    - budget_cap_usd
+    - wiki_sources
+
+logging:
+  record_requested_profile: true
+  record_actual_provider: true
+  record_actual_model: true
+  record_input_tokens: true
+  record_output_tokens: true
+  record_cost_usd: true
+  record_retries: true
+  record_human_interventions: true
+  record_test_status: true
+  record_total_duration: true
