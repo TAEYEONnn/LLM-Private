@@ -1,0 +1,97 @@
+schema_version: '1.0'
+plan_document: docs/82-openknowledge-integration-plan.md
+
+openknowledge:
+  status: candidate-review
+  role: knowledge-authoring-layer
+  install_phase: after-core-link
+  platform: macos-apple-silicon
+
+  source:
+    official_repository: https://github.com/inkeep/open-knowledge
+    official_docs: https://openknowledge.ai/docs
+    release_or_commit: null
+    artifact_sha256: null
+    auto_update: false
+
+  pilot:
+    project_path: '~/AI-Workspace/openknowledge-pilot'
+    data_class: PUBLIC
+    separate_repository: true
+    use_existing_code_repository: false
+    use_llm_private_repository: false
+
+  runtime:
+    preferred_distribution: macos-desktop
+    cli_install: false
+    node_24_required_if_cli: true
+
+  integrations:
+    opencode:
+      enabled: true
+      provider_profile: windows-local-fast
+      inspect_project_config_diff: true
+      inspect_user_config_diff: true
+    claude_code:
+      enabled: false
+    codex:
+      enabled: false
+    cursor:
+      enabled: false
+
+  permissions:
+    full_access: false
+    auto_mode: false
+    initial_scope: read-search
+    project_root_only: true
+    delete_requires_approval: true
+    move_requires_approval: true
+    restore_requires_approval: true
+
+  project_config:
+    content:
+      dir: '.'
+    telemetry:
+      localSink:
+        enabled: false
+
+  project_local_config:
+    autoSync:
+      enabled: false
+    search:
+      semantic:
+        enabled: false
+
+  network:
+    github_sync: false
+    semantic_provider: null
+    support_bundle_upload: false
+    unknown_external_egress_allowed: false
+
+  benchmark:
+    require_core_link_gate: true
+    disable_cloud_fallback: true
+    disable_memory_injection: true
+    disable_context_compression: true
+    tasks:
+      - list-and-read
+      - lexical-search
+      - create-document
+      - partial-edit
+      - timeline-recovery
+      - move-test-document
+      - trash-and-restore-test-document
+      - local-llm-end-to-end
+
+  approval:
+    state: candidate-review
+    minimum_read_search_success_rate: 0.95
+    minimum_write_edit_success_rate: 0.90
+    minimum_timeline_recovery_rate: 1.00
+    maximum_core_baseline_regression: 0.20
+    require_zero_external_egress: true
+    require_zero_path_escape: true
+    require_zero_automatic_push: true
+    require_rollback_verification: true
+
+  handoff_file: config/local/openknowledge-handoff.local.yml
