@@ -1,12 +1,20 @@
 profile: windows
 workspace_root: '<SSD>:\AI-Workspace'
 archive_root: '<HDD>:\AI-Archive'
+local_override_file: config/local/windows.local.yml
+
 network:
   bind_mode: private
-  allowed_client_ips: [MAC_PRIVATE_IP]
+  private_ipv4_discovery: true
+  allowed_client_ip_from_env: MAC_PRIVATE_IP
+  allowed_client_ip_default: null
+
 security:
   default_data_class: PRIVATE
   auto_fallback: false
   auto_payment: false
+
 runtime:
-  candidates: [ollama, llama.cpp]
+  candidates:
+    - ollama
+    - llama.cpp
