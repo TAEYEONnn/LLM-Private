@@ -1,19 +1,41 @@
-schema_version: '1.2'
+schema_version: '2.0'
+primary_roadmap: docs/84-chatgpt-openknowledge-first-plan.md
+
 providers:
-  - provider: windows-local
-    endpoint_from_env: WINDOWS_LLM_ENDPOINT
-    endpoint_default: null
-    discovery_required: true
-    protocol: openai_chat
-    billing_mode: local
-    monthly_budget_usd: 0
-    auto_top_up: false
-    fallback_allowed: false
-    local_override_file: config/local/macos.local.yml
+  - provider: product-managed-chatgpt
+    role: default-interface
+    status: active
+    model: user-or-product-selected
+    billing_mode: subscription-or-product-plan
+    api_key_required: false
+    automatic_fallback: false
+    work_capture: true
     allowed_data_classes:
       - PUBLIC
-      - PRIVATE
-      - CONFIDENTIAL
+      - PRIVATE_WITH_REVIEW
+
+  - provider: product-managed-codex
+    role: repository-executor
+    status: candidate
+    model: user-or-product-selected
+    billing_mode: product-plan
+    api_key_required: false
+    automatic_fallback: false
+    work_capture: true
+    allowed_data_classes:
+      - PUBLIC
+      - PRIVATE_WITH_REVIEW
+
+  - provider: product-managed-claude-code
+    role: repository-executor
+    status: candidate
+    model: user-selected
+    billing_mode: subscription-or-api
+    automatic_fallback: false
+    work_capture: true
+    allowed_data_classes:
+      - PUBLIC
+      - PRIVATE_WITH_REVIEW
 
   - provider: anthropic-sonnet
     endpoint_from_env: ANTHROPIC_API_ENDPOINT
@@ -21,10 +43,12 @@ providers:
     api_key_from_env: ANTHROPIC_API_KEY
     protocol: anthropic_messages
     model: claude-sonnet-4-6
-    role: default_planner_vision_reviewer
+    role: optional-planner-vision-reviewer
+    status: optional
     billing_mode: pay_as_you_go
-    monthly_budget_usd: 10
-    default_task_budget_usd: 0.50
+    monthly_budget_usd: null
+    default_task_budget_usd: null
+    user_selection_required: true
     auto_top_up: false
     fallback_allowed: false
     automatic_escalation: false
@@ -38,9 +62,10 @@ providers:
     api_key_from_env: ANTHROPIC_API_KEY
     protocol: anthropic_messages
     model: claude-opus-4-8
-    role: exceptional_escalation
+    role: exceptional-escalation
+    status: optional
     billing_mode: pay_as_you_go
-    monthly_budget_usd: 10
+    monthly_budget_usd: null
     default_task_budget_usd: null
     user_approval_required: true
     auto_top_up: false
@@ -50,16 +75,35 @@ providers:
       - PUBLIC
       - PRIVATE_WITH_APPROVAL
 
+  - provider: windows-local
+    endpoint_from_env: WINDOWS_LLM_ENDPOINT
+    endpoint_default: null
+    discovery_required: true
+    protocol: openai_chat
+    role: deferred-local-executor
+    status: deferred
+    local_need_gate_required: true
+    billing_mode: local
+    monthly_budget_usd: 0
+    auto_top_up: false
+    fallback_allowed: false
+    local_override_file: config/local/macos.local.yml
+    allowed_data_classes:
+      - PUBLIC
+      - PRIVATE
+      - CONFIDENTIAL
+
   - provider: cloud-payg
     endpoint_from_env: CLOUD_PAYG_ENDPOINT
     endpoint_default: null
     api_key_from_env: CLOUD_PAYG_API_KEY
     protocol: openai_chat
     model: null
-    role: budget_cloud_executor_candidate
+    role: budget-cloud-executor-candidate
+    status: deferred
     billing_mode: pay_as_you_go
-    monthly_budget_usd: 10
-    default_task_budget_usd: 1.00
+    monthly_budget_usd: null
+    default_task_budget_usd: null
     benchmark_required: true
     auto_top_up: false
     fallback_allowed: false
