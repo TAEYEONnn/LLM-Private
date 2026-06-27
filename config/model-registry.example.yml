@@ -1,21 +1,67 @@
-schema_version: '1.0'
+schema_version: '1.1'
 models:
-  - alias: coding-local-fast
-    status: candidate
-    upstream_repository: ''
-    upstream_revision: ''
-    canonical_filename: ''
-    canonical_sha256: ''
-    runtime_model_id: ''
-    architecture: ''
-    total_parameters: null
-    active_parameters: null
-    quantization: Q4_K_M
-    chat_template_source: ''
-    advertised_context_length: null
-    tested_context_length: 8192
-    approved_context_length: null
-    tool_calling: null
-    thinking: null
-    license: ''
+  - alias: coding-local-fast-primary
+    role: coding
+    status: preselected
+    priority: 1
+
+    selection:
+      upstream_model: Qwen/Qwen2.5-Coder-7B-Instruct
+      architecture: dense
+      total_parameters: 7.61B
+      preferred_quantization: Q4_K_M
+
+    runtime_candidates:
+      ollama:
+        model_id: qwen2.5-coder:7b-instruct-q4_K_M
+      llama_cpp:
+        gguf_source: null
+        canonical_filename: null
+        canonical_sha256: null
+
+    execution:
+      initial_context_length: 8192
+      thinking: false
+      temperature: 0
+
+    artifact:
+      state: unresolved
+      resolved_at: null
+      canonical_filename: null
+      canonical_sha256: null
+
+    license: null
+    allowed_data_classes: [PUBLIC, PRIVATE, CONFIDENTIAL]
+
+  - alias: coding-local-fast-agentic
+    role: coding-agent
+    status: preselected
+    priority: 2
+
+    selection:
+      upstream_model: Qwen/Qwen3.5-9B
+      architecture: dense
+      total_parameters: 9B
+      preferred_quantization: Q4_K_M
+
+    runtime_candidates:
+      ollama:
+        model_id: qwen3.5:9b-q4_K_M
+      llama_cpp:
+        gguf_source: null
+        canonical_filename: null
+        canonical_sha256: null
+
+    execution:
+      initial_context_length: 8192
+      thinking: false
+      temperature: 0
+
+    artifact:
+      state: unresolved
+      resolved_at: null
+      canonical_filename: null
+      canonical_sha256: null
+
+    license: null
     allowed_data_classes: [PUBLIC, PRIVATE, CONFIDENTIAL]
