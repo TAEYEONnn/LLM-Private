@@ -1,4 +1,4 @@
-schema_version: '1.1'
+schema_version: '1.2'
 providers:
   - provider: windows-local
     endpoint_from_env: WINDOWS_LLM_ENDPOINT
@@ -15,12 +15,52 @@ providers:
       - PRIVATE
       - CONFIDENTIAL
 
+  - provider: anthropic-sonnet
+    endpoint_from_env: ANTHROPIC_API_ENDPOINT
+    endpoint_default: null
+    api_key_from_env: ANTHROPIC_API_KEY
+    protocol: anthropic_messages
+    model: claude-sonnet-4-6
+    role: default_planner_vision_reviewer
+    billing_mode: pay_as_you_go
+    monthly_budget_usd: 10
+    default_task_budget_usd: 0.50
+    auto_top_up: false
+    fallback_allowed: false
+    automatic_escalation: false
+    allowed_data_classes:
+      - PUBLIC
+      - PRIVATE_WITH_APPROVAL
+
+  - provider: anthropic-opus
+    endpoint_from_env: ANTHROPIC_API_ENDPOINT
+    endpoint_default: null
+    api_key_from_env: ANTHROPIC_API_KEY
+    protocol: anthropic_messages
+    model: claude-opus-4-8
+    role: exceptional_escalation
+    billing_mode: pay_as_you_go
+    monthly_budget_usd: 10
+    default_task_budget_usd: null
+    user_approval_required: true
+    auto_top_up: false
+    fallback_allowed: false
+    automatic_escalation: false
+    allowed_data_classes:
+      - PUBLIC
+      - PRIVATE_WITH_APPROVAL
+
   - provider: cloud-payg
     endpoint_from_env: CLOUD_PAYG_ENDPOINT
     endpoint_default: null
+    api_key_from_env: CLOUD_PAYG_API_KEY
     protocol: openai_chat
+    model: null
+    role: budget_cloud_executor_candidate
     billing_mode: pay_as_you_go
     monthly_budget_usd: 10
+    default_task_budget_usd: 1.00
+    benchmark_required: true
     auto_top_up: false
     fallback_allowed: false
     allowed_data_classes:
