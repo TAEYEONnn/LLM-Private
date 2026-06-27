@@ -1,51 +1,89 @@
-# 00. Shared Architecture v3
+# 00. Shared Architecture v4
+
+작성 기준일: 2026-06-28
 
 ## 목적
-가장 큰 로컬 모델을 실행하는 것이 아니라, 실제 작업에서 안전하고 재현 가능한 AI 스택을 구축한다.
 
-## 통일 대상
-- OpenAI-compatible Chat Completions / Responses
-- 필요 시 Anthropic Messages
-- MCP 도구 연결
-- 공통 모델·공급자 레지스트리
-- 공통 벤치마크와 승인 정책
+가장 큰 로컬 모델을 실행하는 것이 아니라, 실제 작업 결과와 프로젝트 지식을 안전하게 축적하고 재사용하는 AI Workflow를 구축한다.
 
-## 구조
+로컬 모델은 초기 핵심이 아니라 필요성이 확인된 뒤 추가하는 선택적 Executor다.
+
+## 1차 구조
+
 ```text
-MacBook Air
-├─ OpenCode
-│  ├─ Windows Local Fast
-│  ├─ Windows Local Medium
-│  ├─ Windows Local Deep Experimental
-│  ├─ Cloud PAYG
-│  └─ Mac Local Fallback
-├─ Native Codex
-├─ Claude Code Optional
-└─ Browser → Windows Open WebUI
+ChatGPT
+├─ 기획·분석·이미지 이해
+├─ OpenKnowledge 읽기·검색
+└─ 작업 결과 정리
 
+Codex / Claude Code / OpenCode
+├─ 저장소 파일 수정
+├─ Build / Test
+├─ Git diff
+└─ 작업 완료 이벤트 생성
+
+OpenKnowledge
+├─ 프로젝트 Wiki
+├─ 승인된 결정
+├─ 작업 이력
+├─ Runbook·Incident
+└─ Git 기반 Markdown
+```
+
+## 2차 선택 구조
+
+`LOCAL-NEED` Gate 통과 후 다음을 추가할 수 있다.
+
+```text
 Windows AI Server
 ├─ Ollama Candidate
 ├─ llama.cpp Candidate
-├─ LM Studio Optional Lab
-├─ Open WebUI
-├─ ComfyUI
-├─ Context Layer
+├─ Local Fast Model
+├─ Local Embedding Candidate
 └─ Storage
+
+MacBook Air
+├─ OpenCode Local Profile
+└─ OpenKnowledge·Work Capture 재사용
 ```
 
-## 모델 계층
-- Local Fast: 3B~9B, 8K, 반복·정형 작업
-- Local Medium: 10B~14B, Fast 실패 과제 보완
-- Local Deep Experimental: 20B~27B 우선, 4K/8K, 단발성 분석
-- Cloud Frontier: 복잡한 다중 파일 구현과 장기 에이전트
+## 통일 대상
+
+- MCP 도구 연결
+- Work Capture Event Schema
+- 데이터 등급
+- Git·Test·Diff 검증
+- 자동 Fallback 금지
+- 모델·공급자 사용 로그
+- Benchmark와 승인 정책
 
 ## 데이터 등급
-- PUBLIC: 외부 API 허용
-- PRIVATE: 기본 로컬, 명시적 승인 시 외부 전송
-- CONFIDENTIAL: 로컬만 허용
 
-## 자동 폴백 금지
-Local→Cloud, Free→유료, Provider A→B, 실패 후 무한 재시도를 금지한다.
+- PUBLIC: 승인된 외부 제품과 API 사용 가능
+- PRIVATE: 전달 범위를 확인하고 최소 Context만 외부 사용
+- CONFIDENTIAL: 승인된 로컬 환경에서만 처리
+
+## 자동화 금지
+
+- 자동 Local→Cloud 또는 Cloud→Local 전환
+- 무료→유료 자동 승격
+- 자동 Git Push
+- Approved 문서 자동 덮어쓰기
+- 실패 후 무한 재시도
 
 ## 완료 정의
-Mac OpenCode에서 Windows 로컬 모델로 Worktree 파일을 수정하고 테스트와 Diff를 확인한다. Ollama와 llama.cpp 비교, RAG 출처, ComfyUI VRAM 반환, 백업·복원까지 검증한다.
+
+1차 완료:
+
+- OpenKnowledge PUBLIC Pilot
+- ChatGPT 읽기 연결 또는 Project 대안
+- Codex·Claude Code·OpenCode 작업 완료 Hook
+- 승인된 결과의 Wiki 기록
+- 다음 작업에서 기존 지식 재사용
+
+2차 완료:
+
+- 최소 2주 또는 작업 30건 측정
+- Local LLM 필요성 승인 또는 보류 결정
+
+Local이 승인된 경우에만 Windows Local Model과 Mac 연결을 추가 검증한다.
