@@ -1,106 +1,118 @@
 # 43. Local LLM Stack Composition
 
-작성 기준일: 2026-06-27  
-상태: Approved Architecture v1.0
+작성 기준일: 2026-06-28  
+상태: Deferred Architecture v2.0
 
-## 1. 결론
+## 1. 현재 위치
+
+이 문서는 Windows Local LLM이 필요하다고 승인된 뒤 사용하는 후속 설계다.
+
+OpenKnowledge·ChatGPT 읽기 연결·작업 완료 Hook·사용량 측정이 먼저다.
+
+```text
+Wiki First Workflow
+→ 최소 2주 또는 작업 30건 측정
+→ LOCAL-NEED Gate
+→ 필요성이 확인된 경우에만 Local LLM Stack 구축
+```
+
+## 2. 결론
 
 이 프로젝트는 새로운 Foundation Model을 처음부터 학습하는 프로젝트가 아니다.
 
-기존 오픈 가중치 모델과 오픈소스 런타임을 가져와 사용자의 장비·업무·보안 기준에 맞게 조합하고 검증하는 프로젝트다.
+기존 오픈 가중치 모델과 오픈소스 런타임을 사용자의 장비·업무·보안 기준에 맞게 조합하고 검증한다.
 
 ```text
-기존 Open-weight Model
+Open-weight Model
 + Quantization
 + Runtime
 + Chat Template
 + Context
 + Tool Harness
 + Permission Policy
-+ RAG / Wiki
-+ Model Routing
++ OpenKnowledge Hook
 + Benchmark
-= 사용자 전용 Local LLM System
+= 사용자 전용 Local Executor
 ```
 
-따라서 “내가 원하는 로컬 LLM을 만든다”는 표현은 다음 의미로 사용한다.
+Local Executor는 전체 시스템이 아니라 교체 가능한 실행 계층이다.
 
-- 원하는 모델을 선택한다.
-- 장비에 맞는 Quantization을 선택한다.
-- Ollama 또는 llama.cpp 런타임을 선택한다.
-- Context, Thinking, Temperature, 동시 요청 수를 정한다.
-- OpenCode 등 Tool Harness를 연결한다.
-- 읽기·쓰기·Shell 권한을 제한한다.
-- OpenKnowledge, RAG, 프로젝트 규칙을 연결한다.
-- Cloud Planner와 Local Executor의 역할을 나눈다.
-- 실제 업무 Fixture로 승인 여부를 결정한다.
+## 3. 가져오는 영역
 
-## 2. 직접 만드는 영역과 가져오는 영역
-
-### 가져오는 영역
-
-- Qwen, Gemma 등 Base 또는 Instruct Model Weight
-- Ollama, llama.cpp 같은 Runtime
-- OpenCode, Claude Code 같은 Agent Harness
-- OpenKnowledge 같은 Wiki·MCP 계층
+- Qwen·Gemma 등 Base 또는 Instruct Model Weight
+- Ollama·llama.cpp 같은 Runtime
+- OpenCode·Claude Code 등 Agent Harness
+- OpenKnowledge Wiki·MCP 계층
 - 공개 Tool·Skill·Plugin
 
-### 직접 설계하는 영역
+## 4. 직접 설계하는 영역
 
-- 어떤 업무를 어떤 모델에 배정할지
+- 어떤 반복 작업을 Local에 배정할지
 - 모델·양자화·런타임 조합
-- Prompt와 실행 계약
-- Tool Calling 형식과 Parser
-- 프로젝트별 Context 구성
-- PUBLIC / PRIVATE / CONFIDENTIAL 정책
-- 자동 Fallback 금지와 승인 절차
-- Worktree, Test, Diff 검증 흐름
-- Wiki 문서 구조와 승인 상태
-- 비용 한도와 승격 조건
-- Benchmark와 운영 Runbook
+- Prompt와 Execution Contract
+- Tool Calling 형식
+- Context 길이와 동시 요청 수
+- 데이터 등급과 외부 전송 정책
+- Worktree·Test·Diff 검증 흐름
+- Work Capture Hook
+- 비용·운영시간 비교
+- Benchmark와 Rollback
 
-이 직접 설계 영역이 실제 제품성과 안전성을 결정한다.
+## 5. 현재 하드웨어에서 가능한 범위
 
-## 3. 현재 하드웨어에서 가능한 범위
+### 현실적인 범위
 
-### 가능한 범위
-
-- 4B~9B Q4/Q5 모델의 로컬 추론
-- 코드 설명·단일 파일 수정·테스트 복구
+- 4B~9B Q4/Q5 모델 추론
+- 코드 설명
+- 단일 파일 수정
+- 반복적인 문서 변환
+- 테스트 실패 요약
 - 제한된 Tool Calling
-- 로컬 문서 검색과 Wiki 연동
-- 로컬 Embedding
-- Prompt·Template·Context 최적화
-- 필요 시 LoRA Adapter 시험
+- 로컬 문서 검색
+- 로컬 Embedding 후보
 
 ### 현재 범위를 벗어나는 항목
 
-- 대형 Foundation Model의 처음부터 학습
+- 대형 Foundation Model 처음부터 학습
 - 수백 B급 모델의 실용적 로컬 실행
 - 대규모 Full Fine-tuning
 - 여러 대형 모델의 동시 GPU 상주
 - 무제한 Context와 다중 동시 Agent
 
-## 4. Fine-tuning에 대한 입장
+## 6. 초기 후보
 
-Fine-tuning은 Phase 1 목표가 아니다.
+LOCAL-NEED 승인 후 다음부터 시작한다.
 
-우선순위는 다음과 같다.
+```text
+Qwen2.5-Coder-7B-Instruct Q4_K_M
+Context 8192
+Thinking Off
+동시 요청 1
+```
 
-1. 모델 선택
-2. Prompt와 Execution Contract
-3. Wiki·RAG Context 개선
-4. Tool Schema와 Permission 개선
-5. Benchmark 실패 유형 분석
-6. 위 방법으로 해결되지 않는 반복 패턴에만 LoRA 검토
+런타임 후보:
 
-RTX 3060 Ti 8GB 환경에서는 소형 모델의 제한된 LoRA가 가능할 수 있지만, 시간·데이터 품질·회귀 위험을 고려해 별도 Experimental 단계로 분리한다.
+- Ollama
+- llama.cpp
 
-## 5. 승인 단위
+동일 Model·Quantization·Context·Template·Fixture로 비교한다.
+
+## 7. Fine-tuning
+
+Fine-tuning은 초기 Local Pilot 목표가 아니다.
+
+우선순위:
+
+1. Prompt와 Execution Contract
+2. Wiki Context 품질
+3. Tool Schema와 Permission
+4. Model·Quantization·Runtime 선택
+5. 실패 유형 분석
+6. 반복 실패가 명확할 때만 LoRA 검토
+
+## 8. 승인 단위
 
 모델 이름 하나를 승인하지 않는다.
-
-다음 전체 Stack ID를 승인한다.
 
 ```text
 model
@@ -113,23 +125,32 @@ model
 × harness version
 × tool schema
 × permission profile
-× wiki/rag state
+× wiki state
+× work-capture version
 ```
 
-구성 요소 하나가 바뀌면 새 Stack으로 재검증한다.
+구성 요소가 바뀌면 새 Stack으로 재검증한다.
 
-## 6. 사용자 관점의 최종 결과
+## 9. 성공 기준
 
-사용자가 얻게 되는 것은 새로 학습한 독자 모델이 아니라 다음과 같은 개인 AI 작업 환경이다.
+- 기존 Cloud Workflow보다 반복 작업 비용 또는 사용량 불편 감소
+- 테스트 통과율이 승인 기준 충족
+- 재작업과 사람 개입이 허용 범위 이내
+- OpenKnowledge Hook을 그대로 재사용
+- 외부 전송이 불가능한 작업을 안전하게 처리
+- 설치·운영 시간을 포함해 실질적 이득이 있음
+
+## 10. 사용자 관점의 결과
+
+필요가 확인된 경우 최종 흐름은 다음과 같다.
 
 ```text
-Sonnet Planner
+ChatGPT 또는 선택한 Planner
 → 승인된 실행 명세
-→ Local Qwen Executor
+→ Windows Local Executor
 → Build / Test / Diff
+→ 기존 Work Capture Hook
 → OpenKnowledge 기록
 ```
 
-필요한 경우에만 Budget Cloud Executor 또는 Opus Escalation을 수동으로 선택한다.
-
-이 구조는 모델을 소유하는 것보다 작업 흐름·데이터·비용·검증을 통제하는 데 목적이 있다.
+필요가 확인되지 않으면 Local Executor를 설치하지 않고 ChatGPT·Codex·OpenKnowledge 구성을 유지한다.
