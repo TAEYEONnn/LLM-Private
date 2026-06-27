@@ -1,0 +1,18 @@
+schema_version: '1.0'
+providers:
+  - provider: windows-ollama
+    endpoint: http://WINDOWS_PRIVATE_IP:11434/v1
+    protocol: openai_chat
+    billing_mode: local
+    monthly_budget_usd: 0
+    auto_top_up: false
+    fallback_allowed: false
+    allowed_data_classes: [PUBLIC, PRIVATE, CONFIDENTIAL]
+  - provider: cloud-payg
+    endpoint: ''
+    protocol: openai_chat
+    billing_mode: pay_as_you_go
+    monthly_budget_usd: 10
+    auto_top_up: false
+    fallback_allowed: false
+    allowed_data_classes: [PUBLIC]

@@ -1,0 +1,2 @@
+states: [candidate, approved-chat, approved-read-only, approved-write-worktree, approved-write, rejected-quality, rejected-performance, rejected-security, rejected-integrity]
+hard_fail: [confidential_external_transfer, unapproved_paid_api, source_worktree_damage, path_escape_write, unapproved_delete, secret_in_logs, automatic_fallback, test_skip_to_hide_failure, result_log_tampering]

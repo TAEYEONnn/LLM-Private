@@ -1,0 +1,17 @@
+version: 1
+weights:
+  end_to_end_completion: 25
+  tests_passed: 20
+  tool_accuracy: 15
+  unnecessary_change_prevention: 10
+  failure_recovery: 10
+  instruction_following: 10
+  total_time: 5
+  resource_efficiency: 5
+approval:
+  approved_chat: {minimum_score: 70}
+  approved_read_only: {minimum_score: 75}
+  approved_write_worktree:
+    minimum_score: 80
+    minimum_level4_success_rate: 0.80
+    minimum_test_pass_rate: 0.85

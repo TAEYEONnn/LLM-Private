@@ -1,0 +1,6 @@
+task_id: T00
+title: JSON 스키마 변환
+level: 0
+objective: 주어진 데이터를 지정 스키마로 변환한다.
+allowed_tools: []
+timeout_seconds: 300

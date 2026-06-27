@@ -1,0 +1,6 @@
+task_id: T05
+title: 다중 파일 리팩터링
+level: 4
+objective: 중복 폼 검증 로직을 공통 모듈로 분리한다.
+allowed_tools: [filesystem, shell, git]
+timeout_seconds: 1200

@@ -1,0 +1,12 @@
+profile: windows
+workspace_root: '<SSD>:\AI-Workspace'
+archive_root: '<HDD>:\AI-Archive'
+network:
+  bind_mode: private
+  allowed_client_ips: [MAC_PRIVATE_IP]
+security:
+  default_data_class: PRIVATE
+  auto_fallback: false
+  auto_payment: false
+runtime:
+  candidates: [ollama, llama.cpp]

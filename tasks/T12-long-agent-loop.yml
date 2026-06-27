@@ -1,0 +1,6 @@
+task_id: T12
+title: 장기 멀티턴
+level: 5
+objective: 다중 파일 수정과 중간 실패 복구를 수행한다.
+allowed_tools: [filesystem, shell, git]
+timeout_seconds: 1800

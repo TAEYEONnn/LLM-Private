@@ -1,0 +1,6 @@
+task_id: T04
+title: React Loading 상태
+level: 2
+objective: Button에 Loading 상태와 접근성을 추가한다.
+allowed_tools: [filesystem, shell, git]
+timeout_seconds: 600

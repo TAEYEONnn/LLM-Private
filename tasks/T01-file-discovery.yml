@@ -1,0 +1,6 @@
+task_id: T01
+title: 프로젝트 파일 탐색
+level: 1
+objective: 컴포넌트 정의, 테스트, Story 파일 경로를 찾는다.
+allowed_tools: [filesystem, git]
+timeout_seconds: 300

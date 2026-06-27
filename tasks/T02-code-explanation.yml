@@ -1,0 +1,6 @@
+task_id: T02
+title: 코드 설명
+level: 1
+objective: 실제 코드 근거로 모듈의 역할과 예외를 설명한다.
+allowed_tools: [filesystem, git]
+timeout_seconds: 300

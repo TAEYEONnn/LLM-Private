@@ -1,0 +1,6 @@
+task_id: T03
+title: 단일 파일 버그 수정
+level: 2
+objective: 재현 가능한 단일 버그를 최소 변경으로 수정한다.
+allowed_tools: [filesystem, shell, git]
+timeout_seconds: 600

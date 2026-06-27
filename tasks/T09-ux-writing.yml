@@ -1,0 +1,6 @@
+task_id: T09
+title: UX Writing 정규화
+level: 0
+objective: 톤, 버튼 라벨, 오류 메시지를 지정 규칙으로 통일한다.
+allowed_tools: []
+timeout_seconds: 300

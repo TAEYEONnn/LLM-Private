@@ -1,0 +1,6 @@
+task_id: T08
+title: 디자인 시스템 문서
+level: 2
+objective: Props, Variant, State, 금지 사례를 문서화한다.
+allowed_tools: [filesystem, git]
+timeout_seconds: 600

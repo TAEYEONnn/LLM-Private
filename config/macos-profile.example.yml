@@ -1,0 +1,14 @@
+profile: macos
+workspace_root: '~/AI-Workspace'
+windows:
+  host: WINDOWS_PRIVATE_IP
+  ollama_port: 11434
+  open_webui_port: 3000
+  comfyui_port: 8188
+security:
+  default_data_class: PRIVATE
+  auto_fallback: false
+  auto_payment: false
+local_fallback:
+  max_model_class: 9B
+  context_length: 8192

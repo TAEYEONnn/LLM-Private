@@ -1,0 +1,21 @@
+schema_version: '1.0'
+models:
+  - alias: coding-local-fast
+    status: candidate
+    upstream_repository: ''
+    upstream_revision: ''
+    canonical_filename: ''
+    canonical_sha256: ''
+    runtime_model_id: ''
+    architecture: ''
+    total_parameters: null
+    active_parameters: null
+    quantization: Q4_K_M
+    chat_template_source: ''
+    advertised_context_length: null
+    tested_context_length: 8192
+    approved_context_length: null
+    tool_calling: null
+    thinking: null
+    license: ''
+    allowed_data_classes: [PUBLIC, PRIVATE, CONFIDENTIAL]

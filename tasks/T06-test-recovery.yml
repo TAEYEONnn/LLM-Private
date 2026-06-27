@@ -1,0 +1,6 @@
+task_id: T06
+title: 테스트 실패 복구
+level: 3
+objective: 실패 테스트를 분석하고 최소 변경으로 복구한다.
+allowed_tools: [filesystem, shell, git]
+timeout_seconds: 900

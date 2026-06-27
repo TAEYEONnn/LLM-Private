@@ -1,0 +1,6 @@
+task_id: T10
+title: RAG 사실성
+level: 2
+objective: 제공 자료 안에서만 수치와 날짜를 답하고 출처를 표시한다.
+allowed_tools: [filesystem]
+timeout_seconds: 600
