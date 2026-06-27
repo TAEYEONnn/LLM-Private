@@ -10,3 +10,7 @@
 - D-008 Cloud PAYG 예산 상한
 - D-009 TPS보다 종단 성공률
 - D-010 Deep는 Experimental
+- D-011 OpenKnowledge는 로컬 LLM 런타임이 아니라 지식 작성·MCP 계층으로 사용
+- D-012 OpenKnowledge는 CORE-LINK 통과 후 별도 PUBLIC Pilot에서 검증
+- D-013 GitHub Sync·Semantic Search·Full Access는 OpenKnowledge 초기값으로 비활성화
+- D-014 OpenKnowledge 승인 후 별도 Private AI-Knowledge 저장소로 승격
