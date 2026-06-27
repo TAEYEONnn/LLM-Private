@@ -1,13 +1,20 @@
 # 83. OpenKnowledge Bootstrap Plan
 
-작성 기준일: 2026-06-27  
-상태: Candidate Migration Plan v1.0
+작성 기준일: 2026-06-28  
+상태: Candidate Migration Plan v2.0
 
 ## 1. 목적
 
 현재 `LLM-Private` 저장소의 승인된 설계 문서를 OpenKnowledge 기반 `AI-Knowledge` 저장소로 선별 이관한다.
 
-이 작업은 OpenKnowledge PUBLIC Pilot과 CORE-LINK가 모두 승인된 뒤 진행한다.
+이 작업은 다음 조건이 충족된 뒤 진행한다.
+
+- OpenKnowledge PUBLIC Pilot 승인
+- ChatGPT 읽기 연결 또는 Project 대안 검증
+- Draft·Reviewed·Approved Workflow 안정화
+- 작업 완료 Hook 기본 동작 확인
+
+Windows Local LLM과 CORE-LINK는 진입 조건이 아니다.
 
 ## 2. Source of Truth
 
@@ -18,7 +25,7 @@ LLM-Private
 = 시스템 구축 명세의 원본
 
 AI-Knowledge
-= 모델이 읽고 쓰기 쉬운 승인된 지식 사본
+= 모델과 Agent가 읽기 쉬운 승인된 지식 사본
 ```
 
 같은 문서를 양쪽에서 동시에 수정하지 않는다.
@@ -30,8 +37,7 @@ Bootstrap 기간에는 `LLM-Private → AI-Knowledge` 단방향 수동 이관만
 ### 우선 이관
 
 - 전체 Architecture
-- Model·Provider 정책
-- Data·Security 정책
+- 데이터·보안 정책
 - Permission Model
 - Network Baseline
 - Backup·Restore·Migration
@@ -40,6 +46,8 @@ Bootstrap 기간에는 `LLM-Private → AI-Knowledge` 단방향 수동 이관만
 - Implementation Roadmap
 - Decision Log
 - OpenKnowledge Integration Plan
+- ChatGPT + OpenKnowledge First Plan
+- Work Capture Schema 설명
 - Model Sequencing and Cost Governance
 - Local LLM Stack Composition
 
@@ -49,6 +57,7 @@ Bootstrap 기간에는 `LLM-Private → AI-Knowledge` 단방향 수동 이관만
 - Incident 기록
 - 실제 Runtime·Model 승인 결과
 - 설치 Handoff의 비밀값을 제거한 요약
+- 작업 완료 이벤트의 장기 보존 가치가 있는 항목
 
 ### 이관 금지
 
@@ -58,8 +67,9 @@ Bootstrap 기간에는 `LLM-Private → AI-Knowledge` 단방향 수동 이관만
 - API Key
 - 원본 실행 로그
 - 회사 코드와 내부 문서
-- 개인식별정보
+- 개인정보
 - 미검토 AI 생성 초안
+- 전체 채팅 기록
 
 ## 4. 목표 구조
 
@@ -76,8 +86,11 @@ AI-Knowledge/
 │  ├─ network.md
 │  └─ cloud-cost.md
 ├─ integrations/
+│  ├─ chatgpt.md
+│  ├─ codex.md
 │  ├─ opencode.md
 │  └─ openknowledge.md
+├─ work-log/
 ├─ decisions/
 ├─ runbooks/
 ├─ benchmarks/
@@ -113,7 +126,7 @@ supersedes:
 - `approved`
 - `deprecated`
 
-에이전트 실행 기준으로는 `approved` 문서만 사용한다.
+Agent 실행 기준으로는 `approved` 문서만 사용한다.
 
 ## 6. 이관 절차
 
@@ -125,14 +138,16 @@ supersedes:
 6. Source Metadata를 추가한다.
 7. 내부 링크를 OpenKnowledge 경로로 변환한다.
 8. 원문 의미가 바뀌지 않았는지 Diff Review한다.
-9. Sonnet Planner가 구조와 누락을 검토한다.
-10. Local Executor가 링크·Frontmatter·파일 경로를 검사한다.
+9. ChatGPT 또는 승인된 Cloud 모델이 구조와 누락을 검토한다.
+10. Codex·Claude Code·OpenCode 중 하나가 링크·Frontmatter·파일 경로를 검사한다.
 11. 사용자가 최종 승인한다.
 12. 수동 Git Commit한다.
 
+Local LLM이 승인된 뒤에는 10번 검사를 Local Executor로 교체할 수 있다.
+
 ## 7. AI 사용 규칙
 
-### Sonnet Planner
+### ChatGPT 또는 Cloud Reviewer
 
 - 문서 분류
 - 중복 탐지
@@ -140,7 +155,7 @@ supersedes:
 - 요약 초안
 - 링크 관계 제안
 
-### Local Executor
+### Codex·Claude Code·OpenCode
 
 - Markdown 변환
 - Frontmatter 삽입
@@ -148,9 +163,13 @@ supersedes:
 - 파일 이동
 - 정적 검사
 
-### Opus
+### Local Executor
 
-기본적으로 사용하지 않는다. 대규모 Architecture 충돌이나 Sonnet 2회 실패 시에만 수동 승격한다.
+`LOCAL-NEED` Gate 승인 후 선택적으로 사용한다.
+
+- 대량 Markdown 변환
+- 반복적인 링크·Frontmatter 검사
+- 외부 전송이 불가능한 문서 처리
 
 ### 금지
 
@@ -162,7 +181,7 @@ supersedes:
 
 ## 8. Wiki Context 규칙
 
-에이전트는 Wiki 전체를 Context에 넣지 않는다.
+Agent는 Wiki 전체를 Context에 넣지 않는다.
 
 ```text
 검색
@@ -211,13 +230,13 @@ supersedes:
 1. AI-Knowledge의 Bootstrap Commit을 Revert한다.
 2. LLM-Private 원본은 변경하지 않는다.
 3. OpenKnowledge Index를 재구축한다.
-4. MCP 검색 결과에서 이관 문서가 제거됐는지 확인한다.
-5. CORE-LINK Smoke Test를 다시 실행한다.
+4. ChatGPT·Agent 검색 결과에서 이관 문서가 제거됐는지 확인한다.
+5. 작업 완료 Hook Smoke Test를 다시 실행한다.
 
 ## 12. 작업 재개 문구
 
 ```text
-CORE-LINK와 OpenKnowledge PUBLIC Pilot이 승인됐다.
+OpenKnowledge PUBLIC Pilot과 Wiki 승인 Workflow가 승인됐다.
 docs/83-openknowledge-bootstrap-plan.md를 읽고 LLM-Private의 승인 문서를 AI-Knowledge로 선별 이관할 계획을 작성하라.
 아직 파일을 복사하지 말고 Source Commit, 후보 문서, 데이터 등급, 목표 경로, 예상 Diff를 먼저 보고하라.
 ```
