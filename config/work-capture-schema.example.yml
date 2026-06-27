@@ -1,0 +1,108 @@
+schema_version: '1.0'
+plan_document: docs/84-chatgpt-openknowledge-first-plan.md
+
+work_capture:
+  status: candidate
+  destination: openknowledge
+  approval_mode: review_before_write
+  automatic_push: false
+  automatic_approved_overwrite: false
+
+  trigger:
+    on_task_completed: true
+    on_task_failed: true
+    on_manual_checkpoint: true
+    on_every_tool_call: false
+    on_every_chat_message: false
+
+  required_fields:
+    - task_id
+    - project
+    - data_class
+    - request_summary
+    - actor_product
+    - model_or_profile
+    - started_at
+    - completed_at
+    - status
+    - files_changed
+    - verification
+    - decisions
+    - failure_summary
+    - next_action
+    - source_repository
+    - source_branch
+    - source_commit
+
+  optional_fields:
+    - cost_usd
+    - input_tokens
+    - output_tokens
+    - duration_seconds
+    - human_interventions
+    - wiki_sources
+    - related_issues
+    - related_pull_requests
+
+  status_values:
+    - completed
+    - partially_completed
+    - failed
+    - blocked
+    - cancelled
+
+  document_state:
+    default: draft
+    allowed:
+      - draft
+      - reviewed
+      - approved
+      - deprecated
+    agent_may_set_approved: false
+
+  redaction:
+    remove_secrets: true
+    remove_tokens: true
+    remove_cookies: true
+    remove_private_ip: true
+    remove_personal_data: true
+    include_full_chat_log: false
+    include_hidden_reasoning: false
+    include_raw_terminal_log: false
+
+  write_policy:
+    project_root_only: true
+    create_new_document: allowed_with_review
+    edit_draft_document: allowed_with_review
+    edit_reviewed_document: proposal_only
+    edit_approved_document: proposal_only
+    delete_document: user_approval_required
+    move_document: user_approval_required
+    git_commit: user_approval_required
+    git_push: prohibited_by_default
+
+  output_template:
+    path_pattern: 'projects/{project}/work-log/{yyyy}/{yyyy-mm-dd}-{task_id}.md'
+    frontmatter:
+      - title
+      - status
+      - data_class
+      - project
+      - task_id
+      - actor_product
+      - model_or_profile
+      - source_repository
+      - source_branch
+      - source_commit
+      - started_at
+      - completed_at
+      - verified_at
+
+  metrics:
+    record_reuse_count: true
+    record_search_hits: true
+    record_manual_corrections: true
+    record_cloud_limit_or_cost_pain: true
+    record_local_suitable: true
+    measurement_window_days: 14
+    minimum_tasks_before_local_need_review: 30
