@@ -1,12 +1,56 @@
-schema_version: '1.0'
+schema_version: '1.1'
 policy_document: docs/93-skill-evaluation-policy.md
 
 skills:
+  - id: openknowledge
+    display_name: OpenKnowledge
+    official_repository: https://github.com/inkeep/open-knowledge
+    official_docs: https://openknowledge.ai/docs
+    status: candidate-review
+    priority: 1
+    category: knowledge-app-mcp
+    intended_scope: separate-knowledge-repository
+    install_phase: after-core-link
+    capabilities:
+      - wysiwyg-markdown
+      - knowledge-graph
+      - mcp-document-tools
+      - agentic-search
+      - timeline-recovery
+      - git-backed-history
+    restrictions:
+      - macos-desktop-pilot-first
+      - public-pilot-data-only
+      - no-init-in-llm-private
+      - no-init-in-existing-code-repository
+      - github-sync-disabled
+      - semantic-search-disabled
+      - full-access-disabled
+      - auto-mode-disabled
+      - inspect-generated-skills-and-mcp-config
+    security:
+      manual_review_required: true
+      artifact_hash_required: true
+      external_egress_test_required: true
+      rollback_test_required: true
+      skillsllm_status: not-recorded
+      scan_date: null
+    pin:
+      release_or_commit: null
+      sha256: null
+    benchmark:
+      plan: docs/82-openknowledge-integration-plan.md
+      manifest: config/openknowledge-pilot.example.yml
+      require_core_link_gate: true
+      maximum_core_baseline_regression: 0.20
+    auto_update: false
+    auto_install: false
+
   - id: superpowers
     display_name: Superpowers
     official_repository: https://github.com/obra/superpowers
     status: candidate-review
-    priority: 1
+    priority: 2
     intended_scope: project
     install_phase: after-core-phase-1
     capabilities:
@@ -35,7 +79,7 @@ skills:
     display_name: UI UX Pro Max
     official_repository: https://github.com/nextlevelbuilder/ui-ux-pro-max-skill
     status: candidate-review
-    priority: 2
+    priority: 3
     intended_scope: design-project-only
     install_phase: after-infrastructure-build
     capabilities:
@@ -58,7 +102,7 @@ skills:
     display_name: Headroom
     official_repository: https://github.com/chopratejas/headroom
     status: deferred
-    priority: 3
+    priority: 4
     intended_scope: experimental
     install_phase: phase-3-or-later
     capabilities:
@@ -82,7 +126,7 @@ skills:
     display_name: gstack
     official_repository: https://github.com/garrytan/gstack
     status: deferred
-    priority: 4
+    priority: 5
     intended_scope: browser-qa-only
     install_phase: on-demand
     capabilities:
@@ -110,7 +154,7 @@ skills:
     display_name: Claude-Mem
     official_repository: https://github.com/thedotmack/claude-mem
     status: deferred
-    priority: 5
+    priority: 6
     intended_scope: none
     install_phase: privacy-review-required
     capabilities:
@@ -132,7 +176,7 @@ skills:
     display_name: ECC
     official_repository: https://github.com/affaan-m/ECC
     status: deferred
-    priority: 6
+    priority: 7
     intended_scope: none
     install_phase: overlap-review-required
     capabilities:
